@@ -12,3 +12,11 @@ h1{
   width: 90vw;
   height: 90vh;
 }
+
+.marker {
+    /* display: block;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 0; */
+}
