@@ -4,14 +4,20 @@
     <meta charset="utf-8">
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.js'></script>
+    <script src='https://npmcdn.com/@turf/turf/turf.min.js'></script>
+    <script src="/js/app.js" charset="utf-8"></script>
+
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/app.js" charset="utf-8"></script>
+
     <title>Flying Crow Salesman</title>
   </head>
   <body>
+
     <h1>Flying crow sales man Cie</h1>
+    <p>Please <strong> double click </strong> on the map to set your home address and up to 8 destinations for your journey</p>
+    <button class="calcIt">Calculate optimal itinerary</button>
     <div id='map'></div>
 
   </body>
