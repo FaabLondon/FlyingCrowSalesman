@@ -69,7 +69,7 @@ window.addEventListener('DOMContentLoaded', () => {
         .setLngLat([e.lngLat.lng, e.lngLat.lat])
         .addTo(map);
       //add the new location to the array of locations. It includes the starting point (home)
-      locationsArr.push(e.lngLat);
+      locationsArr.push([e.lngLat.lng, e.lngLat.lat]);
     } else {
       window.alert('You can add a maximum of 8 destinations for your journey');
     }
@@ -78,8 +78,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
   // function to calculate distance between 2 points
   function calculateDist(pointA, pointB){
-    const from = turf.point([pointA.lng, pointA.lat]);
-    const to = turf.point([pointB.lng, pointB.lat]);
+    const from = turf.point(pointA);
+    const to = turf.point(pointB);
     const options = {units: 'kilometers'};
     return turf.distance(from, to, options);
   }
@@ -113,11 +113,12 @@ window.addEventListener('DOMContentLoaded', () => {
       //recursive call on the points left in the itinerary
       const innerPermutations = CalcPermutations(pointsLeft);
       for (let j = 0; j < innerPermutations.length; j++) {
-        //innerPermutations can be an array of single object [{lng, lat}] or array of arrays of objects [[{lng, lat}, {lng, lat}], [{lng, lat}, {lng, lat}],  ...] hence the test below.
-        innerPermutations[j].length ?
+        //innerPermutations can be an array with one or several arrays of coordinates [[ {lng, lat}, {lng, lat} ], ...,  ...] hence the test below.
+        innerPermutations.length > 1 ?
           permutations.push([firstPoint, ...innerPermutations[j]]) : permutations.push([firstPoint, innerPermutations[j]]);
       }
     }
+    console.log('permutation', permutations);
     return permutations;
   }
 
@@ -140,6 +141,36 @@ window.addEventListener('DOMContentLoaded', () => {
       if (currentTotalDist < shortestDist){
         bestRouteArr = currentRoute.slice();
         shortestDist = currentTotalDist;
+      }
+    });
+
+    //once best itinerary is found draw it on the map
+    drawBestRoute();
+  }
+
+  function drawBestRoute(){
+    
+    map.addLayer({
+      "id": "route",
+      "type": "line",
+      "source": {
+          "type": "geojson",
+          "data": {
+              "type": "Feature",
+              "properties": {},
+              "geometry": {
+                  "type": "LineString",
+                  "coordinates": bestRouteArr
+              }
+          }
+      },
+      "layout": {
+          "line-join": "round",
+          "line-cap": "round"
+      },
+      "paint": {
+          "line-color": "#ff0066",
+          "line-width": 4
       }
     });
   }
