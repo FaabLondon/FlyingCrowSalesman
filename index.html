@@ -9,6 +9,7 @@
 
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.css' rel='stylesheet' />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
     <link rel="stylesheet" href="/css/style.css">
 
     <title>Flying Crow Salesman</title>
@@ -16,8 +17,10 @@
   <body>
 
     <h1>Flying crow sales man Cie</h1>
-    <p>Please <strong> double click </strong> on the map to set your home address and up to 8 destinations for your journey</p>
-    <button class="calcIt">Calculate optimal itinerary</button>
+    <p>Please <span> double click </span> on the map to set your home address and up to 8 destinations for your journey</p>
+    <button class="calcIt">Get shortest route</button>
+    <button class="reset">Reset</button>
+    <div class="distance"></div>
     <div id='map'></div>
 
   </body>
