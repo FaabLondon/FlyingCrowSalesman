@@ -1,8 +1,7 @@
 {
   "name": "flying_crow_salesman",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "main": "index.js",
   "dependencies": {
     "express": "^4.16.3",
     "mapbox-gl": "^0.45.0"
@@ -21,5 +20,6 @@
   "bugs": {
     "url": "https://github.com/FaabLondon/FlyingCrowSalesman/issues"
   },
-  "homepage": "https://github.com/FaabLondon/FlyingCrowSalesman#readme"
+  "homepage": "https://github.com/FaabLondon/FlyingCrowSalesman#readme",
+  "description": ""
 }
