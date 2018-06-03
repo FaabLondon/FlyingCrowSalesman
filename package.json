@@ -21,5 +21,8 @@
     "url": "https://github.com/FaabLondon/FlyingCrowSalesman/issues"
   },
   "homepage": "https://github.com/FaabLondon/FlyingCrowSalesman",
-  "description": ""
+  "description": "",
+  "engines": {
+    "node": "9.4.0"
+  }
 }
