@@ -9,7 +9,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const latitude = -0.181719;
   const longitude = 51.519739;
   let locationsArr = [];
-  const maxLocations = 9; //including home as starting point
+  const maxLocations = 9; //including the starting point
   let startEndPoint = null;
   let bestRouteArr = [];
   let shortestDist = null;
@@ -32,7 +32,7 @@ window.addEventListener('DOMContentLoaded', () => {
       });
 
       //disable double click on map as double click should add icons
-      //single click is used to move the map
+      //single click is used to move the map east, west, north, south
       map.doubleClickZoom.disable();
 
       // Add zoom and rotation controls to the map.
@@ -45,7 +45,6 @@ window.addEventListener('DOMContentLoaded', () => {
         if(locationsArr.length < maxLocations){
           //define marker with DOM element (div)
           var elt = document.createElement('div');
-          elt.className = 'marker'; //in order to style it
           //Add house icon if first marker, otherwise pin icon
           elt.innerHTML = locationsArr.length === 0 ? '<i class="fas fa-home fa-2x"></i>' : '<i class="fas fa-thumbtack fa-2x"></i>';
           //add marker to map
@@ -65,15 +64,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // *********************** drawBestRoute ***********************************
     drawBestRoute(){
-      //remove previous layer in case user keeps adding new points
+      //remove previous layer in case user keeps adding new points after the route is drawn
       //still gets error message despite catch err...
       try {
         this.map.removeLayer('route');
         this.map.removeSource('route');
       } catch (err){
-        // nothing
+        // nothing - still get error message...
       }
-      // try {map.removeSource('route')} catch (err);
+      //adds route and styling between the different points of the best route
+      //JSON format
       this.map.addLayer({
         "id": "route",
         "type": "line",
@@ -99,23 +99,26 @@ window.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // *********************** Reset *******************************************
+    // *********************** Reset the map *******************************************
     destroy() {
-      //remove the markers
+      //remove all the markers
       this.markers.forEach(marker => marker.remove());
-      //re-initialise global variables - not great practice...
+
+      //re-initialise global variables - not the best way to do it...
       locationsArr = [];
       startEndPoint = null;
       bestRouteArr = [];
       shortestDist = null;
       document.querySelector('.distance').innerHTML = '';
-      //this.map = null;  //do not delete instance of map as can not draw on it anymore so keep the same instance all the time
-      //remove the route
+      //I do not delete the instance of the map as I would need to create a new one to draw a new route...so I am actually not deleting the map...so not freeing up memory...
+      //this.map = null;
+
+      //remove the route, still get an error message when route does not exist yet...
       try {
         this.map.removeLayer('route');
         this.map.removeSource('route');
       } catch (err){
-        // nothing
+        // nothing - error catching does not seem to work...
       }
     }
 
@@ -132,6 +135,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
   // *********************** calculate Itinerary *******************************
+
   function calculate() {
     switch(locationsArr.length){
       case 0:
@@ -146,6 +150,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   //************function to calculate distance between 2 points*****************
+
   function calculateDist(pointA, pointB){
     const from = turf.point(pointA);
     const to = turf.point(pointB);
@@ -154,7 +159,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  //*********function to calculate the total distance of an itinerary***********
+  //*********function to calculate the total distance of an itinerary **********
+
   function calculateTotalDist(itineraryArr){
     //initialise with distance from last point back home
     let totalDist = calculateDist(itineraryArr[itineraryArr.length - 1], itineraryArr[0]);
@@ -166,8 +172,9 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  //**************function that returns an array with all permutations**********
-  //(not including starting point and endpoint)
+  //************** function that returns an array with all permutations ********
+
+  //not including starting point and endpoint
   function CalcPermutations(itinerary){
     const permutations = [];
 
@@ -200,12 +207,14 @@ window.addEventListener('DOMContentLoaded', () => {
     const itinerariesArr = CalcPermutations(itinerary.slice(1)); //returns an array of arrays of all itineraries without start and end point
     console.log('Nb of permutations !(n - 1)', itinerariesArr.length);
     //Define initial best route as one of the permutation with the start and end point
+    //can have array of arrays or just array hence test below
     bestRouteArr = itinerariesArr.length > 1 ? [startEndPoint, ...itinerariesArr[0], startEndPoint] : [startEndPoint, itinerariesArr[0], startEndPoint];
-
+    //initialise the shortest distance
     shortestDist = calculateTotalDist(bestRouteArr);
 
     //if the itinerary has a total distance smaller than the current shortest distance
     itinerariesArr.forEach(itin => {
+      //Itinerary can be array of arrays or just array hence test below
       const currentRoute = itin[0].length > 1 ? [startEndPoint, ...itin, startEndPoint] : [startEndPoint, itin, startEndPoint];
       const currentTotalDist = calculateTotalDist(currentRoute);
       if (currentTotalDist < shortestDist){
@@ -214,7 +223,7 @@ window.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    //once best itinerary is found draw it on the map and update the distance displayed
+    //once best itinerary is found, draw it on the map and update the distance displayed
     map.drawBestRoute();
     document.querySelector('.distance').innerHTML = `The shortest route will be <span> ${Math.round(shortestDist*100)/100} km </span> long`;
   }
