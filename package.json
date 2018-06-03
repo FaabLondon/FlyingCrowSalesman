@@ -2,7 +2,7 @@
   "name": "flying_crow_salesman",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "app.js",
   "dependencies": {
     "mapbox-gl": "^0.45.0"
   },
